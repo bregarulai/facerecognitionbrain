@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import "./App.css";
+import Clarifai from "clarifai";
 import Particles from "react-particles-js";
 import Navigation from "./components/navigation/Navigation";
 import Logo from "./components/logo/Logo";
 import ImageLinkForm from "./components/imageLinkForm/ImageLinkForm";
 import Rank from "./components/rank/Rank";
+import FaceRecognition from "./components/faceRecognition/FaceRecognition";
 
 function App() {
   const app = new Clarifai.App({
-    apiKey: "YOUR_API_KEY",
+    apiKey: process.env.REACT_APP_API_KEY,
   });
 
   const [input, setInput] = useState("");
@@ -18,12 +20,14 @@ function App() {
   };
 
   const onButtonSubmit = () => {
-    console.log("clicked");
+    console.log(process.env.REACT_APP_API_KEY);
     app.models
-      .predict("{model_id}", ["https://samples.clarifai.com/puppy.jpeg"])
+      .predict("a403429f2ddf4b49b307e318f00e528b", [
+        "https://samples.clarifai.com/puppy.jpeg",
+      ])
       .then(
         function (response) {
-          // do something with response
+          console.log(response);
         },
         function (err) {
           // there was an error
@@ -52,6 +56,7 @@ function App() {
         onInputChange={onInputChange}
         onButtonSubmit={onButtonSubmit}
       />
+      <FaceRecognition />
       {/*<Logo />
       <ImageLinkForm />
       <FaceRecognition />*/}
