@@ -7,6 +7,10 @@ import ImageLinkForm from "./components/imageLinkForm/ImageLinkForm";
 import Rank from "./components/rank/Rank";
 
 function App() {
+  const app = new Clarifai.App({
+    apiKey: "YOUR_API_KEY",
+  });
+
   const [input, setInput] = useState("");
 
   const onInputChange = (event) => {
@@ -15,6 +19,16 @@ function App() {
 
   const onButtonSubmit = () => {
     console.log("clicked");
+    app.models
+      .predict("{model_id}", ["https://samples.clarifai.com/puppy.jpeg"])
+      .then(
+        function (response) {
+          // do something with response
+        },
+        function (err) {
+          // there was an error
+        }
+      );
   };
 
   const particlesOptions = {
