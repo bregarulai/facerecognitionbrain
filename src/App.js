@@ -9,30 +9,30 @@ import Rank from "./components/rank/Rank";
 import FaceRecognition from "./components/faceRecognition/FaceRecognition";
 
 function App() {
+  //"a403429f2ddf4b49b307e318f00e528b"
   const app = new Clarifai.App({
     apiKey: process.env.REACT_APP_API_KEY,
   });
 
   const [input, setInput] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const onInputChange = (event) => {
-    console.log(event.target.value);
+    setInput(event.target.value);
   };
 
   const onButtonSubmit = () => {
-    console.log(process.env.REACT_APP_API_KEY);
-    app.models
-      .predict("a403429f2ddf4b49b307e318f00e528b", [
-        "https://samples.clarifai.com/puppy.jpeg",
-      ])
-      .then(
-        function (response) {
-          console.log(response);
-        },
-        function (err) {
-          // there was an error
-        }
-      );
+    setImageUrl(input);
+    app.models.predict(Clarifai.FACE_DETECT_MODEL, [input]).then(
+      function (response) {
+        console.log(
+          response.outputs[0].data.regions[0].region_info.bounding_box
+        );
+      },
+      function (err) {
+        // there was an error
+      }
+    );
   };
 
   const particlesOptions = {
@@ -56,7 +56,7 @@ function App() {
         onInputChange={onInputChange}
         onButtonSubmit={onButtonSubmit}
       />
-      <FaceRecognition />
+      <FaceRecognition imageUrl={imageUrl} />
       {/*<Logo />
       <ImageLinkForm />
       <FaceRecognition />*/}
