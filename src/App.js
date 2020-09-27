@@ -9,30 +9,45 @@ import Rank from "./components/rank/Rank";
 import FaceRecognition from "./components/faceRecognition/FaceRecognition";
 
 function App() {
-  //"a403429f2ddf4b49b307e318f00e528b"
   const app = new Clarifai.App({
     apiKey: process.env.REACT_APP_API_KEY,
   });
 
   const [input, setInput] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [box, setBox] = useState({});
 
   const onInputChange = (event) => {
     setInput(event.target.value);
   };
 
+  const calculateFaceLocation = (data) => {
+    const clarifaiFace =
+      data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById("inputImage");
+    const width = Number(image.width);
+    const height = Number(image.height);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - clarifaiFace.right_col * width,
+      bottomRow: height - clarifaiFace.bottom_row * height,
+    };
+  };
+
+  const displayFaceBox = (box) => {
+    setBox(box);
+  };
+
   const onButtonSubmit = () => {
     setImageUrl(input);
-    app.models.predict(Clarifai.FACE_DETECT_MODEL, [input]).then(
-      function (response) {
-        console.log(
-          response.outputs[0].data.regions[0].region_info.bounding_box
-        );
-      },
-      function (err) {
-        // there was an error
-      }
-    );
+    app.models
+      .predict(Clarifai.FACE_DETECT_MODEL, [input])
+      .then((response) =>
+        displayFaceBox(calculateFaceLocation(response)).catch((err) =>
+          console.log(err)
+        )
+      );
   };
 
   const particlesOptions = {
@@ -56,10 +71,7 @@ function App() {
         onInputChange={onInputChange}
         onButtonSubmit={onButtonSubmit}
       />
-      <FaceRecognition imageUrl={imageUrl} />
-      {/*<Logo />
-      <ImageLinkForm />
-      <FaceRecognition />*/}
+      <FaceRecognition box={box} imageUrl={imageUrl} />
     </div>
   );
 }
