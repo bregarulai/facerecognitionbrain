@@ -17,6 +17,7 @@ function App() {
   const [input, setInput] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [box, setBox] = useState({});
+  const [route, setRoute] = useState("signIn");
 
   const onInputChange = (event) => {
     setInput(event.target.value);
@@ -51,6 +52,10 @@ function App() {
       );
   };
 
+  const onRouteChange = () => {
+    setRoute("home");
+  };
+
   const particlesOptions = {
     particles: {
       number: {
@@ -66,14 +71,19 @@ function App() {
     <div className="App">
       <Particles className="particles" params={particlesOptions} />
       <Navigation />
-      <SignIn />
-      <Logo />
-      <Rank />
-      <ImageLinkForm
-        onInputChange={onInputChange}
-        onButtonSubmit={onButtonSubmit}
-      />
-      <FaceRecognition box={box} imageUrl={imageUrl} />
+      {route === "signIn" ? (
+        <SignIn onRouteChange={onRouteChange} />
+      ) : (
+        <div>
+          <Logo />
+          <Rank />
+          <ImageLinkForm
+            onInputChange={onInputChange}
+            onButtonSubmit={onButtonSubmit}
+          />
+          <FaceRecognition box={box} imageUrl={imageUrl} />
+        </div>
+      )}
     </div>
   );
 }
