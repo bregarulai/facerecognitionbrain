@@ -52,8 +52,8 @@ function App() {
       );
   };
 
-  const onRouteChange = () => {
-    setRoute("home");
+  const onRouteChange = (route) => {
+    setRoute(route);
   };
 
   const particlesOptions = {
@@ -70,7 +70,7 @@ function App() {
   return (
     <div className="App">
       <Particles className="particles" params={particlesOptions} />
-      <Navigation />
+      <Navigation onRouteChange={onRouteChange} />
       {route === "signIn" ? (
         <SignIn onRouteChange={onRouteChange} />
       ) : (
