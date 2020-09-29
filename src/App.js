@@ -21,6 +21,14 @@ function App() {
   const [route, setRoute] = useState("signIn");
   const [isSignedIn, setIsSignedIn] = useState(false);
 
+  /*
+  useEffect(() => {
+    fetch("http://localhost:3001")
+      .then((response) => response.json())
+      .then(console.log);
+  }, []);
+  */
+
   const onInputChange = (event) => {
     setInput(event.target.value);
   };
