@@ -20,6 +20,13 @@ function App() {
   const [box, setBox] = useState({});
   const [route, setRoute] = useState("signIn");
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState({
+    id: "",
+    name: "",
+    email: "",
+    entries: 0,
+    joined: "",
+  });
 
   /*
   useEffect(() => {
@@ -71,6 +78,16 @@ function App() {
     setRoute(route);
   };
 
+  const loadUser = (data) => {
+    setUser({
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined,
+    });
+  };
+
   const particlesOptions = {
     particles: {
       number: {
@@ -89,7 +106,7 @@ function App() {
       {route === "home" ? (
         <div>
           <Logo />
-          <Rank />
+          <Rank user={user} />
           <ImageLinkForm
             onInputChange={onInputChange}
             onButtonSubmit={onButtonSubmit}
@@ -97,9 +114,9 @@ function App() {
           <FaceRecognition box={box} imageUrl={imageUrl} />
         </div>
       ) : route === "signIn" ? (
-        <SignIn onRouteChange={onRouteChange} />
+        <SignIn loadUser={loadUser} onRouteChange={onRouteChange} />
       ) : (
-        <Register onRouteChange={onRouteChange} />
+        <Register loadUser={loadUser} onRouteChange={onRouteChange} />
       )}
     </div>
   );

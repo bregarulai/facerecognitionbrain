@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SignIn = ({ onRouteChange }) => {
+const SignIn = ({ onRouteChange, loadUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -22,12 +22,13 @@ const SignIn = ({ onRouteChange }) => {
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        if (data === "Success") {
+      .then((user) => {
+        if (user.id) {
+          loadUser(user);
           onRouteChange("home");
         }
       });
-    onRouteChange("home");
+    onRouteChange("signIn");
   };
 
   return (
@@ -44,7 +45,7 @@ const SignIn = ({ onRouteChange }) => {
                 onChange={onEmailChange}
                 className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                 type="email"
-                name="email-address"
+                name="email"
                 id="email-address"
               />
             </div>
