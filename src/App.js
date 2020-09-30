@@ -60,13 +60,24 @@ function App() {
 
   const onButtonSubmit = () => {
     setImageUrl(input);
-    app.models
-      .predict(Clarifai.FACE_DETECT_MODEL, [input])
-      .then((response) =>
-        displayFaceBox(calculateFaceLocation(response)).catch((err) =>
-          console.log(err)
-        )
+    app.models.predict(Clarifai.FACE_DETECT_MODEL, [input]).then((response) => {
+      if (response) {
+        fetch("http://localhost:3001/image", {
+          method: "put",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            id: user.id,
+          }),
+        })
+          .then((response) => response.json())
+          .then((count) => {
+            setUser({ ...user, entries: count });
+          });
+      }
+      displayFaceBox(calculateFaceLocation(response)).catch((err) =>
+        console.log(err)
       );
+    });
   };
 
   const onRouteChange = (route) => {
