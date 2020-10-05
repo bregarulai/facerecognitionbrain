@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./App.css";
-import Clarifai from "clarifai";
 import Particles from "react-particles-js";
 import Navigation from "./components/navigation/Navigation";
 import Logo from "./components/logo/Logo";
@@ -10,11 +9,7 @@ import FaceRecognition from "./components/faceRecognition/FaceRecognition";
 import SignIn from "./components/signIn/SignIn";
 import Register from "./components/register/Register";
 
-function App() {
-  const app = new Clarifai.App({
-    apiKey: process.env.REACT_APP_API_KEY,
-  });
-
+const App = () => {
   const [input, setInput] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [box, setBox] = useState({});
@@ -52,25 +47,31 @@ function App() {
 
   const onButtonSubmit = () => {
     setImageUrl(input);
-    app.models.predict(Clarifai.FACE_DETECT_MODEL, [input]).then((response) => {
-      if (response) {
-        fetch("http://localhost:3001/image", {
-          method: "put",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({
-            id: user.id,
-          }),
-        })
-          .then((response) => response.json())
-          .then((count) => {
-            setUser({ ...user, entries: count });
+    fetch("http://localhost:3001/imageurl", {
+      method: "post",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        input: input,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response) {
+          fetch("http://localhost:3001/image", {
+            method: "put",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              id: user.id,
+            }),
           })
-          .catch(console.log);
-      }
-      displayFaceBox(calculateFaceLocation(response)).catch((err) =>
-        console.log(err)
-      );
-    });
+            .then((response) => response.json())
+            .then((count) => {
+              setUser({ ...user, entries: count });
+            })
+            .catch(console.log);
+        }
+        displayFaceBox(calculateFaceLocation(response));
+      });
   };
 
   const onRouteChange = (route) => {
@@ -134,6 +135,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;
