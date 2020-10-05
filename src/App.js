@@ -45,9 +45,10 @@ const App = () => {
     setBox(box);
   };
 
+  const URL = process.env.REACT_APP_API_URL;
   const onButtonSubmit = () => {
     setImageUrl(input);
-    fetch("http://localhost:3001/imageurl", {
+    fetch(`${URL}/imageurl`, {
       method: "post",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -57,7 +58,7 @@ const App = () => {
       .then((response) => response.json())
       .then((response) => {
         if (response) {
-          fetch("http://localhost:3001/image", {
+          fetch(`${URL}/image`, {
             method: "put",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({
@@ -129,9 +130,9 @@ const App = () => {
           <FaceRecognition box={box} imageUrl={imageUrl} />
         </div>
       ) : route === "signIn" ? (
-        <SignIn loadUser={loadUser} onRouteChange={onRouteChange} />
+        <SignIn URL={URL} loadUser={loadUser} onRouteChange={onRouteChange} />
       ) : (
-        <Register loadUser={loadUser} onRouteChange={onRouteChange} />
+        <Register URL={URL} loadUser={loadUser} onRouteChange={onRouteChange} />
       )}
     </div>
   );
