@@ -28,14 +28,6 @@ function App() {
     joined: "",
   });
 
-  /*
-  useEffect(() => {
-    fetch("http://localhost:3001")
-      .then((response) => response.json())
-      .then(console.log);
-  }, []);
-  */
-
   const onInputChange = (event) => {
     setInput(event.target.value);
   };
@@ -72,7 +64,8 @@ function App() {
           .then((response) => response.json())
           .then((count) => {
             setUser({ ...user, entries: count });
-          });
+          })
+          .catch(console.log);
       }
       displayFaceBox(calculateFaceLocation(response)).catch((err) =>
         console.log(err)
@@ -83,6 +76,16 @@ function App() {
   const onRouteChange = (route) => {
     if (route === "signOut") {
       setIsSignedIn(false);
+      setInput("");
+      setImageUrl("");
+      setBox({});
+      setUser({
+        id: "",
+        name: "",
+        email: "",
+        entries: 0,
+        joined: "",
+      });
     } else if (route === "home") {
       setIsSignedIn(true);
     }
