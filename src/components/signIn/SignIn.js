@@ -13,7 +13,7 @@ const SignIn = ({ onRouteChange, loadUser, URL }) => {
   };
 
   const onSubmitSignin = () => {
-    fetch(`${URL}/signin`, {
+    fetch(`${URL}signin`, {
       method: "post",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({

@@ -48,7 +48,7 @@ const App = () => {
   const URL = process.env.REACT_APP_API_URL;
   const onButtonSubmit = () => {
     setImageUrl(input);
-    fetch(`${URL}/imageurl`, {
+    fetch(`${URL}imageurl`, {
       method: "post",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -58,7 +58,7 @@ const App = () => {
       .then((response) => response.json())
       .then((response) => {
         if (response) {
-          fetch(`${URL}/image`, {
+          fetch(`${URL}image`, {
             method: "put",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({

@@ -18,7 +18,7 @@ const Register = ({ onRouteChange, loadUser, URL }) => {
   };
 
   const onSubmitRegister = () => {
-    fetch(`${URL}/register`, {
+    fetch(`${URL}register`, {
       method: "post",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -33,7 +33,8 @@ const Register = ({ onRouteChange, loadUser, URL }) => {
           loadUser(user);
           onRouteChange("home");
         }
-      });
+      })
+      .catch((err) => console.log(err));
     onRouteChange("signIn");
   };
   return (
